@@ -96,21 +96,34 @@ TW.fetchJSON = async function (url) {
   if (!r.ok) throw new Error(url + ': ' + r.status);
   return r.json();
 };
-TW.fetchBin = async function (url, onProgress) {
+// Binary download with optional progress. `expected` is the decoded size in bytes when known.
+// Content-Length is the size on the wire: servers such as GitHub Pages send the files gzipped,
+// so it can be smaller than the decoded stream. The chunks are therefore collected and joined
+// at the end rather than written into a buffer of that size.
+TW.fetchBin = async function (url, onProgress, expected) {
   const r = await fetch(url);
   if (!r.ok) throw new Error(url + ': ' + r.status);
-  if (!onProgress || !r.body || !r.headers.get('content-length')) return r.arrayBuffer();
-  const total = +r.headers.get('content-length');
-  const reader = r.body.getReader();
-  const out = new Uint8Array(total);
-  let got = 0;
-  for (;;) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    out.set(value, got); got += value.length;
-    onProgress(got / total);
+  let buf;
+  if (!onProgress || !r.body) buf = await r.arrayBuffer();
+  else {
+    const enc = (r.headers.get('content-encoding') || 'identity').toLowerCase();
+    const total = expected || (enc === 'identity' ? +r.headers.get('content-length') || 0 : 0);
+    const reader = r.body.getReader();
+    const parts = [];
+    let got = 0;
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      parts.push(value); got += value.length;
+      if (total) onProgress(Math.min(got / total, 1));
+    }
+    const out = new Uint8Array(got);
+    let o = 0;
+    for (const p of parts) { out.set(p, o); o += p.length; }
+    buf = out.buffer;
   }
-  return out.buffer;
+  if (expected && buf.byteLength !== expected) throw new Error(`${url}: ${buf.byteLength} bytes received, ${expected} expected`);
+  return buf;
 };
 
 TW.quantile = function (arr, q) {
@@ -127,7 +140,8 @@ TW._dsCache = {};
 TW.loadDataset = async function (id, onProgress) {
   if (TW._dsCache[id]) return TW._dsCache[id];
   const meta = await TW.fetchJSON(`data/${id}.json`);
-  const buf = await TW.fetchBin(`data/${id}_sensors.bin`, onProgress);
+  const rows = meta.blocks.reduce((a, b) => a + b.n, 0);
+  const buf = await TW.fetchBin(`data/${id}_sensors.bin`, onProgress, rows * meta.channels.length * 2);
   const ds = new TW.Dataset(meta, new Uint16Array(buf));
   TW._dsCache[id] = ds;
   return ds;
@@ -194,9 +208,9 @@ TW.Dataset = class {
   async loadModel(mid, onProgress) {
     if (this._scores[mid]) return this._scores[mid];
     const m = this.modelById[mid];
-    const buf = await TW.fetchBin(`data/${m.file}`, onProgress);
-    const all = new Float32Array(buf);
     const n = this.nScored;
+    const buf = await TW.fetchBin(`data/${m.file}`, onProgress, m.runs.length * n * 4);
+    const all = new Float32Array(buf);
     const runs = m.runs.map((r, i) => all.subarray(i * n, (i + 1) * n));
     this._scores[mid] = runs;
     return runs;
