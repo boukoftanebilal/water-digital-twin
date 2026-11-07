@@ -377,7 +377,8 @@ TW.View2D = class {
     c.chs = c.rows.flatMap(r => r.chs);
     this.anim.push(st => {
       for (const r of rows) {
-        const txt = r.idx.map(j => TW.fmt(st.vals[j], 1)).join(' · ');
+        // compact values (2.66k rather than 2,656.6) so that three set-points fit next to the row label
+        const txt = r.idx.map(j => { const v = st.vals[j]; return Math.abs(v) >= 1000 ? (v / 1000).toFixed(2) + 'k' : TW.fmt(v, 1); }).join(' · ');
         if (r.t.textContent !== txt) r.t.textContent = txt;
         let m = 0, ev = false;
         for (const j of r.idx) { m = Math.max(m, Math.abs(st.z[j])); if (st.evTop === j) ev = true; }

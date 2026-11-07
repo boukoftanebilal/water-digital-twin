@@ -40,7 +40,7 @@ TW.plants.hai = {
     { id: 'DCS', t: 'dcs', x: 400, y: 318, w: 198, h: 128, label: 'DCS loops (set-points)', rows: [
       { label: '1001 pressure', chs: ['x1001_05_SETPOINT_OUT', 'x1001_15_ASSIGN_OUT'] },
       { label: '1002 level', chs: ['x1002_07_SETPOINT_OUT', 'x1002_08_SETPOINT_OUT'] },
-      { label: '1003 temperature', chs: ['x1003_10_SETPOINT_OUT', 'x1003_18_SETPOINT_OUT', 'x1003_24_SUM_OUT'] },
+      { label: '1003 temp.', chs: ['x1003_10_SETPOINT_OUT', 'x1003_18_SETPOINT_OUT', 'x1003_24_SUM_OUT'] },
       { label: 'Boiler start/stop', chs: ['P1_STSP'] } ] },
     // P2 turbine
     { id: 'LAMPS', t: 'lamps', x: 636, y: 68, label: '', items: [

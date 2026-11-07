@@ -45,7 +45,13 @@ TW.View3D = class {
     (plant.tags || []).forEach(t => this.tag(t));
     this.beacon();
     this.raycaster = new THREE.Raycaster(); this.mouse = new THREE.Vector2();
-    r.domElement.addEventListener('click', e => this.onClick(e));
+    // a click picks a sensor or component, but not the release at the end of an orbit or pan drag
+    r.domElement.addEventListener('pointerdown', e => { this._down = [e.clientX, e.clientY]; });
+    r.domElement.addEventListener('click', e => {
+      const d = this._down; this._down = null;
+      if (d && Math.hypot(e.clientX - d[0], e.clientY - d[1]) > 5) return;
+      this.onClick(e);
+    });
     this.resize();
     this._ro = new ResizeObserver(() => this.resize());
     this._ro.observe(host);
