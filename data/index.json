@@ -1,0 +1,117 @@
+[
+ {
+  "id": "hai",
+  "name": "HAI 23.05",
+  "title": "HAI testbed: boiler, turbine, water treatment and HIL power grid",
+  "kind": "Cyber-physical attacks",
+  "licence": "CC BY-SA 4.0",
+  "source": "HIL-based Augmented ICS security dataset, NSR (Korea); github.com/icsdataset/hai",
+  "channels": 86,
+  "events": 38,
+  "records": 1,
+  "seconds": 230370,
+  "hop_s": 30,
+  "full_k": 14,
+  "best_sup": [
+   "TabICL",
+   0.7924
+  ],
+  "best_ref": [
+   "GDN",
+   0.7746
+  ],
+  "runs": 228
+ },
+ {
+  "id": "skab",
+  "name": "SKAB",
+  "title": "Skoltech Anomaly Benchmark: water circulation testbed",
+  "kind": "Pump and valve faults",
+  "licence": "GPL-3.0",
+  "source": "Skoltech Anomaly Benchmark; github.com/waico/SKAB",
+  "channels": 8,
+  "events": 20,
+  "records": 20,
+  "seconds": 23220,
+  "hop_s": 30,
+  "full_k": 14,
+  "best_sup": [
+   "TabICL",
+   0.874
+  ],
+  "best_ref": [
+   "Isolation Forest",
+   0.8259
+  ],
+  "runs": 228
+ },
+ {
+  "id": "smartfarm",
+  "name": "Smart-Farm-IDS",
+  "title": "Smart farm: nutrient tank, irrigation and greenhouse climate",
+  "kind": "Irrigation tampering",
+  "licence": "CC BY 4.0",
+  "source": "Smart-Farm-IDS; github.com/kadirileri/Smart-Farm-IDS",
+  "channels": 14,
+  "events": 17,
+  "records": 1,
+  "seconds": 93570,
+  "hop_s": 30,
+  "full_k": 10,
+  "best_sup": [
+   "Deep SAD",
+   0.9096
+  ],
+  "best_ref": [
+   "PCA-SPE",
+   0.8657
+  ],
+  "runs": 228
+ },
+ {
+  "id": "wdsevent",
+  "name": "WDSEventDB",
+  "title": "Water distribution testbed: four pump lines and a throttled circuit",
+  "kind": "Leaks, sensor failures and cyber-attacks",
+  "licence": "CC BY 4.0",
+  "source": "WDSEventDB; zenodo.org/records/17547955",
+  "channels": 15,
+  "events": 7,
+  "records": 5,
+  "seconds": 8430,
+  "hop_s": 30,
+  "full_k": 4,
+  "best_sup": [
+   "Gradient boosting",
+   0.9556
+  ],
+  "best_ref": [
+   "GDN",
+   0.8905
+  ],
+  "runs": 143
+ },
+ {
+  "id": "gecco",
+  "name": "GECCO 2018",
+  "title": "Bulk drinking-water supply: water quality measuring station",
+  "kind": "Water-quality events (partly imputed)",
+  "licence": "CC BY 4.0",
+  "source": "GECCO 2018 Industrial Challenge, Th\u00fcringer Fernwasserversorgung; zenodo.org/records/3884398",
+  "channels": 9,
+  "events": 36,
+  "records": 1,
+  "seconds": 4658400,
+  "hop_s": 360,
+  "full_k": 14,
+  "best_sup": [
+   "TabPFN (v1)",
+   0.9904
+  ],
+  "best_ref": [
+   "Isolation Forest",
+   0.9919
+  ],
+  "runs": 228
+ }
+]
