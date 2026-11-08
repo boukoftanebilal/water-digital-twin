@@ -4,16 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Water Digital Twin · Article 2</title>
-<meta name="description" content="Digital twin of the five water-infrastructure testbeds of Article 2: replay of the evaluation periods with the recorded anomaly scores, and a what-if lab with fault injection.">
+<title>Water Digital Twin</title>
+<meta name="description" content="Digital twin of five water-infrastructure testbeds: replay of the evaluation periods with the recorded anomaly scores of 14 detectors, and a what-if lab with fault injection.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%230b1322'/%3E%3Cpath d='M32 10 C24 24 18 32 18 40 a14 14 0 0 0 28 0 C46 32 40 24 32 10Z' fill='%2339b6ff'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="css/app.css?v=3">
+<link rel="stylesheet" href="css/app.css?v=4">
 </head>
 <body class="at-home">
 <header class="top">
   <a class="brand" href="#/">
     <svg viewBox="0 0 64 64" width="26" height="26"><circle cx="32" cy="32" r="30" fill="#0b1322" stroke="#36d6e7" stroke-width="2"/><path d="M32 12 C24 25 18 33 18 41 a14 14 0 0 0 28 0 C46 33 40 25 32 12Z" fill="#39b6ff"/><path d="M24 42 a8 8 0 0 0 8 8" stroke="#e8eefc" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
-    <span>Water Digital Twin</span><small>Article 2 · v0.5</small>
+    <span>Water Digital Twin</span><small>5 testbeds · 14 detectors</small>
   </a>
   <nav class="tabs" id="tabs"></nav>
   <div class="grow"></div>
@@ -25,11 +25,11 @@
 <main id="home" class="page">
   <section class="hero">
     <div class="hero-txt">
-      <div class="eyebrow">Companion to Article 2 · GNNs versus tabular foundation models</div>
+      <div class="eyebrow">Graph neural networks versus tabular foundation models · label-scarce anomaly detection</div>
       <h1>A digital twin of five water-infrastructure testbeds</h1>
-      <p>Replay the real evaluation periods of <b>HAI 23.05</b>, <b>SKAB</b>, <b>Smart-Farm-IDS</b>, <b>WDSEventDB</b> and <b>GECCO 2018</b> through animated models of each plant. Choose any detector of the article, its label budget and draw, and watch it raise or miss alarms as the attacks, faults and quality events unfold. Then switch to the what-if lab, inject your own faults and see detectors running in your browser respond.</p>
+      <p>Replay the real evaluation periods of <b>HAI 23.05</b>, <b>SKAB</b>, <b>Smart-Farm-IDS</b>, <b>WDSEventDB</b> and <b>GECCO 2018</b> through animated models of each plant. Choose any of the 14 detectors, its label budget and draw, and watch it raise or miss alarms as the attacks, faults and quality events unfold. Then switch to the what-if lab, inject your own faults and see detectors running in your browser respond.</p>
       <div class="hero-feats">
-        <div><b>Real data, recorded scores</b><span>Sensor values from the datasets; anomaly scores of all 14 detectors, every label budget and draw (1,055 runs of the v0.5 sweep); event metrics recomputed live with the article's definitions.</span></div>
+        <div><b>Real data, recorded scores</b><span>Sensor values from the datasets; anomaly scores of all 14 detectors, every label budget and draw (1,055 runs); event metrics recomputed live as the replay advances.</span></div>
         <div><b>2D and 3D</b><span>A SCADA-style schematic and a 3D model of every plant, animated from the sensor values: tanks fill, pumps spin, valves move, points light up when they deviate.</span></div>
         <div><b>What-if lab</b><span>Leaks, frozen or spoofed sensors, forced actuators: point-deviation, PCA-residual and process-graph-residual detectors fitted on normal data react in real time.</span></div>
       </div>
@@ -37,7 +37,7 @@
   </section>
   <section class="cards" id="cards"></section>
   <footer class="foot">
-    <p>Companion to <i>Graph Neural Networks versus Tabular Foundation Models for Label-Scarce Anomaly Detection in Water Infrastructure: A Comparison on Five Datasets</i> (B. Boukoftane, J. M. Navarro Ruiz, A. Pita Lozano; manuscript under preparation). Results are those of the v0.5 runs and may change before publication.</p>
+    <p>Based on the study <i>Graph Neural Networks versus Tabular Foundation Models for Label-Scarce Anomaly Detection in Water Infrastructure: A Comparison on Five Datasets</i> (B. Boukoftane, J. M. Navarro Ruiz, A. Pita Lozano). The results are preliminary and may change.</p>
     <p>Data: HAI 23.05 (NSR, CC BY-SA 4.0) · SKAB (Skoltech, GPL-3.0) · Smart-Farm-IDS (CC BY 4.0) · WDSEventDB (CC BY 4.0) · GECCO 2018 Industrial Challenge (Thüringer Fernwasserversorgung, CC BY 4.0). Values are aggregated to one tick per 30-s hop (6 min on GECCO 2018).</p>
   </footer>
 </main>
@@ -72,10 +72,10 @@
   <div class="modal-box">
     <button class="close">×</button>
     <h2>About this digital twin</h2>
-    <p><b>What is real.</b> The sensor values are those of the evaluation periods of the five datasets, averaged over each 30-s hop of the article's 60-s windows (6-min hops of 12-min windows on GECCO 2018). The anomaly scores are the stored per-window scores of the v0.5 runs of Article 2: 14 detectors, every label budget k and label draw, and the zero-label references. Thresholds are the run's own: the F1-optimal threshold on the validation split (as in the article) or the 99th percentile of the validation negatives. Event recall, window precision, event F1, false alarms per hour of normal operation and detection delay are computed live with the article's definitions; at the end of the replay they reproduce the article's values (for 7 of the 1,055 runs, all gradient boosting, a few windows lie within float32 rounding of the threshold, and the replay differs slightly).</p>
+    <p><b>What is real.</b> The sensor values are those of the evaluation periods of the five datasets, averaged over each 30-s hop of the 60-s analysis windows (6-min hops of 12-min windows on GECCO 2018). The anomaly scores are the stored per-window scores of the 1,055 benchmark runs: 14 detectors, every label budget k and label draw, and the zero-label references. Thresholds are the run's own: the F1-optimal threshold on the validation split (the default) or the 99th percentile of the validation negatives. Event recall, window precision, event F1, false alarms per hour of normal operation and detection delay are computed live; at the end of the replay they reproduce the recorded results of each run (for 7 of the 1,055 runs, all gradient boosting, a few windows lie within float32 rounding of the threshold, and the replay differs slightly).</p>
     <p><b>What is modelled.</b> The plant drawings are schematic. HAI P1 follows the physical boiler graph shipped with HAI; P2–P4 follow the HAI technical report. SKAB follows the benchmark's testbed description; the valve symbols close during the labelled valve-closing experiments. Smart-Farm-IDS, WDSEventDB and GECCO 2018 are laid out from the dataset descriptions and channel structure. Animations (levels, pump rotation, flows) are driven by the recorded values.</p>
-    <p><b>What is simulated.</b> In the what-if lab, injected faults are synthetic changes of the recorded values. The article's detectors cannot see them (their scores are recorded); three detectors run in your browser instead: point deviation (largest |z|), PCA residual (squared prediction error of the normal correlation structure) and process-graph residual (every point predicted from its neighbours on the process graph of the article). They use the article's causal normal reference, are fitted on the normal record that precedes the evaluation period, and alarm at their 99th percentile there.</p>
-    <p><b>Article.</b> B. Boukoftane, J. M. Navarro Ruiz, A. Pita Lozano. <i>Graph Neural Networks versus Tabular Foundation Models for Label-Scarce Anomaly Detection in Water Infrastructure: A Comparison on Five Datasets.</i> Manuscript under preparation (v0.5). Results may change before publication.</p>
+    <p><b>What is simulated.</b> In the what-if lab, injected faults are synthetic changes of the recorded values. The 14 recorded detectors cannot see them (their scores are recorded); three detectors run in your browser instead: point deviation (largest |z|), PCA residual (squared prediction error of the normal correlation structure) and process-graph residual (every point predicted from its neighbours on the process graph). They use the same causal normal reference as the replay, are fitted on the normal record that precedes the evaluation period, and alarm at their 99th percentile there.</p>
+    <p><b>Study.</b> B. Boukoftane, J. M. Navarro Ruiz, A. Pita Lozano. <i>Graph Neural Networks versus Tabular Foundation Models for Label-Scarce Anomaly Detection in Water Infrastructure: A Comparison on Five Datasets.</i> The results are preliminary and may change.</p>
     <p><b>Data licences.</b> HAI 23.05 (NSR, CC BY-SA 4.0); SKAB (GPL-3.0); Smart-Farm-IDS (CC BY 4.0); WDSEventDB (CC BY 4.0); GECCO 2018 Industrial Challenge dataset, Thüringer Fernwasserversorgung (CC BY 4.0). The derived data of this site are shared under the same terms.</p>
     <p><b>Keys.</b> Space play/pause · ← → step · N / P next / previous event · Esc close the inspector.</p>
   </div>
@@ -84,14 +84,14 @@
 
 <script src="vendor/three.min.js"></script>
 <script src="vendor/OrbitControls.js"></script>
-<script src="js/core.js?v=3"></script>
-<script src="js/metrics.js?v=3"></script>
-<script src="js/plants.js?v=3"></script>
-<script src="js/art.js?v=3"></script>
-<script src="js/view2d.js?v=3"></script>
-<script src="js/view3d.js?v=3"></script>
-<script src="js/charts.js?v=3"></script>
-<script src="js/lab.js?v=3"></script>
-<script src="js/app.js?v=3"></script>
+<script src="js/core.js?v=4"></script>
+<script src="js/metrics.js?v=4"></script>
+<script src="js/plants.js?v=4"></script>
+<script src="js/art.js?v=4"></script>
+<script src="js/view2d.js?v=4"></script>
+<script src="js/view3d.js?v=4"></script>
+<script src="js/charts.js?v=4"></script>
+<script src="js/lab.js?v=4"></script>
+<script src="js/app.js?v=4"></script>
 </body>
 </html>

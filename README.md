@@ -1,8 +1,8 @@
-# Water Digital Twin · Article 2
+# Water Digital Twin
 
 Live site: https://boukoftanebilal.github.io/water-digital-twin/
 
-This site is an interactive digital twin of the five water-infrastructure testbeds used in Article 2:
+This site is an interactive digital twin of five water-infrastructure testbeds:
 
 - HAI 23.05
 - SKAB
@@ -10,17 +10,17 @@ This site is an interactive digital twin of the five water-infrastructure testbe
 - WDSEventDB
 - GECCO 2018
 
-The article is *Graph Neural Networks versus Tabular Foundation Models for Label-Scarce Anomaly Detection in Water Infrastructure: A Comparison on Five Datasets*, by B. Boukoftane, J. M. Navarro Ruiz and A. Pita Lozano. It is a manuscript in preparation (v0.5), so the results may change before publication.
+It is based on the study *Graph Neural Networks versus Tabular Foundation Models for Label-Scarce Anomaly Detection in Water Infrastructure: A Comparison on Five Datasets*, by B. Boukoftane, J. M. Navarro Ruiz and A. Pita Lozano. The results are preliminary and may change.
 
 ## Replay
 
 The twin replays the real evaluation period of each dataset through animated models of the plant, in a 2D SCADA-style schematic or a 3D scene.
 
-- You choose any detector of the article: TabPFN (v1 and v2), TabICL, gradient boosting, DevNet, Deep SAD, the GNN on the process, correlation or no graph, and the zero-label references.
+- You choose any of the 14 detectors: TabPFN (v1 and v2), TabICL, gradient boosting, DevNet, Deep SAD, the GNN on the process, correlation or no graph, and the zero-label references.
 - You also choose its label budget, its label draw and its threshold.
 - The site shows the run's recorded anomaly scores, alarms and detections as they happen.
-- Event recall, window precision, event F1, false alarms per hour and delay are computed live with the article's definitions.
-- At the end of the period these values reproduce the article's numbers. The exception is 7 of the 1,055 runs, all gradient boosting, where a few stored float32 scores round across the threshold.
+- Event recall, window precision, event F1, false alarms per hour and delay are computed live as the replay advances.
+- At the end of the period these values reproduce the recorded results of each run. The exception is 7 of the 1,055 runs, all gradient boosting, where a few stored float32 scores round across the threshold.
 
 ## What-if lab
 
@@ -32,7 +32,7 @@ Three detectors run in the browser and react live:
 - PCA residual;
 - process-graph residual.
 
-They use the article's causal normal reference and are fitted on the normal record that precedes the evaluation period. A counterfactual fixed reference can be switched on to see why the article uses the causal one.
+They use a causal normal reference and are fitted on the normal record that precedes the evaluation period. A counterfactual fixed reference can be switched on to see why the causal one is the default.
 
 ## Data
 
@@ -50,4 +50,4 @@ The derived data in `data/` are shared under the same terms.
 
 ## Technical
 
-The site is static (HTML, CSS and plain JavaScript) and uses three.js r128, which is vendored in `vendor/`. It was built from the stored per-window scores of the Article 2 v0.5 runs.
+The site is static (HTML, CSS and plain JavaScript) and uses three.js r128, which is vendored in `vendor/`. It was built from the stored per-window scores of the 1,055 benchmark runs.
