@@ -89,7 +89,7 @@
             h('span', null, h('b', null, hours >= 48 ? (hours / 24).toFixed(0) + ' d' : hours.toFixed(1) + ' h'), ' replay'),
             h('span', null, h('b', null, d.runs), ' runs')),
           h('div', { class: 'pcard-best' },
-            'Best ranker (article): ', h('b', null, d.best_sup[0]), ' AUROC ', d.best_sup[1].toFixed(2),
+            'Best ranker: ', h('b', null, d.best_sup[0]), ' AUROC ', d.best_sup[1].toFixed(2),
             ' · best zero-label: ', h('b', null, d.best_ref[0]), ' ', d.best_ref[1].toFixed(2)),
           h('div', { class: 'pcard-go' }, 'Open the twin →'))));
     });
@@ -196,7 +196,7 @@
     thrSeg.addEventListener('click', e => { const t = e.target.dataset.t; if (t) { S.thrMode = t; setRun(); } });
     const slider = h('input', { type: 'range', min: 0.5, max: 0.9995, step: 0.0005, value: S.manualQ, id: 'thrSlider',
       oninput: e => { S.manualQ = +e.target.value; S.thrMode = 'manual'; setRun(true); } });
-    side.appendChild(card('Detector', 'recorded scores of the article runs',
+    side.appendChild(card('Detector', 'recorded scores of every run',
       h('label', null, 'Model'), sel,
       h('label', null, 'Labelled events', h('span', { class: 'lhint' }, 'label budget k')), h('div', { class: 'chips', id: 'chipsK' }),
       h('label', null, 'Label draw'), h('div', { class: 'chips', id: 'chipsSeed' }),
@@ -274,18 +274,18 @@
       const parts = Object.entries(cls).map(([c, n]) => (n > 1 ? n + '× ' : '') + c);
       txt = `Trained on ${run.k} labelled event${run.k > 1 ? 's' : ''} of the labelled pool` + (parts.length ? ' (' + parts.join(', ') + ')' : '') + '.';
     }
-    const thrTxt = { val: 'F1-optimal on the validation split (as in the article)', nb: '99th percentile of the validation negatives (1% false-alarm budget)', manual: `manual (${TW.pct(1 - S.manualQ, 1)} of the evaluation windows above θ)` }[S.thrMode];
+    const thrTxt = { val: 'F1-optimal on the validation split (default)', nb: '99th percentile of the validation negatives (1% false-alarm budget)', manual: `manual (${TW.pct(1 - S.manualQ, 1)} of the evaluation windows above θ)` }[S.thrMode];
     el.append(h('div', null, txt), h('div', null, 'θ = ' + TW.fmt(S.thr) + ' — ' + thrTxt));
     const mm = run.m;
     const art = $('#artLine'); art.innerHTML = '';
-    art.append(h('span', { class: 'artlab' }, 'Article, whole evaluation period (this run):'),
+    art.append(h('span', { class: 'artlab' }, 'Recorded result, whole evaluation period (this run):'),
       h('span', null, `AUROC ${TW.fmt(mm.auroc, 2)} · AUC-PR ${TW.fmt(mm.aucpr, 2)} · event recall ${TW.fmt(mm.er, 2)} · window precision ${TW.fmt(mm.wp, 2)} · event F1 ${TW.fmt(mm.f1e, 2)} · ${TW.fmt(mm.fa, 2)} false alarms/h`));
     if (S.thrMode === 'val') {
       const f = S.R.final;
       const same = run.exact !== false && Math.abs(f.er - mm.er) < 1e-3 && Math.abs(f.faph - mm.fa) < 1e-3;
       art.appendChild(h('span', { class: 'check ' + (same ? 'ok' : 'warn') }, same
         ? '✓ the replay reproduces these event metrics at the end of the period'
-        : '≈ in this run a few stored float32 scores round across θ, so the replay differs slightly from the article'));
+        : '≈ in this run a few stored float32 scores round across θ, so the replay differs slightly from the recorded result'));
     }
   }
 
@@ -329,8 +329,8 @@
       h('div', { class: 'card-h' }, h('span', null, 'Detectors running in your browser'), h('span', { class: 'hint' }, 'fitted on normal data, 1% budget')),
       h('div', { id: 'labDet' }),
       h('div', { class: 'lab-sub' }, 'Normal reference'),
-      h('div', { class: 'seg small', id: 'segRef' }, h('button', { 'data-r': 'causal', class: 'on' }, 'Causal (article)'), h('button', { 'data-r': 'fixed' }, 'Fixed (counterfactual)')),
-      h('div', { class: 'hint2' }, 'The fixed reference uses the mean of the normal record for every point, the counterfactual of Section 7.8; watch the false alarms on records that change operating point.')));
+      h('div', { class: 'seg small', id: 'segRef' }, h('button', { 'data-r': 'causal', class: 'on' }, 'Causal (default)'), h('button', { 'data-r': 'fixed' }, 'Fixed (counterfactual)')),
+      h('div', { class: 'hint2' }, 'The fixed reference uses the mean of the normal record for every point, a counterfactual; watch the false alarms on records that change operating point.')));
     $('#segRef').addEventListener('click', e => {
       const r = e.target.dataset.r; if (!r) return;
       TW.$$('#segRef button').forEach(b => b.classList.toggle('on', b.dataset.r === r));

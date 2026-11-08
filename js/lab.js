@@ -1,5 +1,5 @@
 /* What-if lab: fault injection into the replayed sensor stream and three detectors that run in the browser.
-   Every point is referenced the way Article 2 does it: a causal level (median of the preceding window of the same
+   Every point is referenced the same way as in the benchmark: a causal level (median of the preceding window of the same
    record, or the mean of the record's first minutes for short experiment records) and the scale of normal operation;
    the detectors are fitted on the normal record that precedes the evaluation period and alarm at their 99th
    percentile there (a 1% false-alarm budget). */
@@ -180,7 +180,7 @@ TW.Lab = class {
     this.evaluate();
   }
 
-  /* event recall and false alarms of each detector on the replay, with the article's event metrics */
+  /* event recall and false alarms of each detector on the replay, with the same event metrics as the replay */
   evaluate() {
     const ds = this.ds;
     this.results = {};

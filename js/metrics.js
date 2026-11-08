@@ -1,4 +1,4 @@
-/* Event metrics of Article 2 (code/metrics.py, run_generic.evaluate), ported for the replay.
+/* Event metrics of the benchmark (code/metrics.py, run_generic.evaluate), ported for the replay.
    A window is credited to an event if it overlaps [start, end + tolerance]; an event is detected if a credited
    window is flagged; an alarm episode (run of consecutive flagged windows of one record) is a false alarm if none
    of its windows is credited. Window precision uses the unambiguous windows; event F1 is the harmonic mean of
