@@ -663,7 +663,8 @@
     const injNow = S.lab.injections.filter(x => i >= x.start && i <= x.start + x.dur);
     if (ev) {
       eb.className = 'hud-event on';
-      eb.textContent = `${EV_ICON[ev.cls] || '⚠'} Real incident in progress: labelled event ${evName(ev)}`;
+      eb.textContent = `${EV_ICON[ev.cls] || '⚠'} Real incident in progress · ${evName(ev)}`;
+      eb.title = eb.textContent;
     } else if (injNow.length) {
       eb.className = 'hud-event inj'; eb.textContent = '⚡ Injected fault: ' + injNow.map(x => x.name).join(' + ');
     } else { eb.className = 'hud-event'; eb.textContent = ''; }
