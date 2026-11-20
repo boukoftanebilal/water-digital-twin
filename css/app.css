@@ -89,9 +89,11 @@ body.at-home .twin-only { display: none; }
 .plant2d { width: 100%; height: 100%; display: block; }
 .plant3d { display: block; }
 .hud { position: absolute; pointer-events: none; z-index: 5; }
-.stagehead { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; padding: 0 4px; min-height: 30px; }
-.sh-left { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
-.sh-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+/* one line only, so the plant never jumps when a badge appears */
+.stagehead { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: nowrap; padding: 0 4px; min-height: 32px; }
+.sh-left { display: flex; align-items: baseline; gap: 10px; min-width: 0; overflow: hidden; }
+.sh-left .hud-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.sh-right { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; justify-content: flex-end; flex: none; }
 .hud.bl3d { left: 14px; bottom: 10px; display: none; align-items: center; gap: 10px; pointer-events: auto; background: rgba(255, 255, 255, .9); padding: 4px 8px; border-radius: 10px; border: 1px solid var(--line); }
 .stage.is3d .hud.bl3d { display: flex; }
 .ghost.small { font-size: 12px; padding: 3px 9px; }
@@ -107,7 +109,7 @@ body.at-home .twin-only { display: none; }
 .hud-alarm.idle { color: var(--txt3); }
 .hud-alarm.on { color: #fff; background: var(--bad); border-color: var(--bad); animation: pulse 0.9s infinite; }
 @keyframes pulse { 50% { box-shadow: 0 0 0 6px rgba(217, 45, 32, .18); } }
-.hud-event { max-width: 560px; padding: 4px 11px; border-radius: 10px; font-size: 12px; font-weight: 700; display: none; }
+.hud-event { max-width: 470px; padding: 4px 11px; border-radius: 10px; font-size: 12px; font-weight: 700; display: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .hud-event.on { display: inline-block; background: var(--badbg); color: #9f1d14; border: 1px solid #f3b4ae; }
 .hud-event.inj { display: inline-block; background: var(--injbg); color: #5b21b6; border: 1px solid #c9b2f7; }
 .legend2 { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--txt2); align-items: center; }
@@ -284,6 +286,8 @@ input[type=range] { accent-color: var(--inj); width: 100%; }
 .toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 @media (max-width: 1100px) {
+  .stagehead, .sh-right { flex-wrap: wrap; }
+  .hud-event { white-space: normal; }
   .layout { grid-template-columns: 1fr; }
   .inspector { right: 16px; }
   .hero-feats, .steps { grid-template-columns: 1fr; }
