@@ -75,10 +75,16 @@ TW.clock = function (t, ds) {
 
 TW.colorDev = function (z) {
   const a = Math.abs(z);
-  if (!isFinite(a)) return '#5b6b85';
-  if (a < 2) return '#2fd38a';
-  if (a < 4) return '#ffc145';
-  return '#ff4d5e';
+  if (!isFinite(a)) return '#94a3b8';
+  if (a < 2) return '#22a052';
+  if (a < 4) return '#f59e0b';
+  return '#d92d20';
+};
+
+TW.MODEL_COLOUR = {
+  tabpfn_v1: '#2563eb', tabpfn_v2: '#0891b2', tabicl: '#ea580c', hgb: '#059669', devnet: '#db2777', deepsad: '#16a34a',
+  gnn_process: '#a16207', gnn_corr: '#7c3aed', gnn_none: '#e11d48',
+  iforest: '#64748b', pca_spe: '#475569', usad: '#78716c', gdn: '#0f766e', chronos: '#6b7280',
 };
 
 TW.hexToRgb = function (hex) {
@@ -194,6 +200,8 @@ TW.Dataset = class {
     // events of the evaluation period
     this.events = meta.events.filter(e => e.role === 'eval').sort((a, b) => a.start - b.start);
     this.eventById = Object.fromEntries(meta.events.map(e => [e.id, e]));
+    // colours chosen for the light theme (the data files keep the original ones)
+    meta.models.forEach(m => { if (TW.MODEL_COLOUR[m.id]) m.colour = TW.MODEL_COLOUR[m.id]; });
     this.models = meta.models;
     this.modelById = Object.fromEntries(meta.models.map(m => [m.id, m]));
     this._scores = {};

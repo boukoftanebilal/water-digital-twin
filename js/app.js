@@ -60,6 +60,8 @@
     $('#viewSeg').addEventListener('click', e => { const v = e.target.dataset.v; if (v) { S.view = v; applyView(); setHash(); } });
     $('#modeSeg').addEventListener('click', e => { const m = e.target.dataset.m; if (m) { S.mode = m; applyMode(); setHash(); } });
     $('#aboutBtn').addEventListener('click', () => $('#about').classList.remove('hidden'));
+    $('#guideBtn').addEventListener('click', () => $('#guide').classList.remove('hidden'));
+    $('#guide').addEventListener('click', e => { if (e.target.id === 'guide' || e.target.classList.contains('close')) $('#guide').classList.add('hidden'); });
     $('#about').addEventListener('click', e => { if (e.target.id === 'about' || e.target.classList.contains('close')) $('#about').classList.add('hidden'); });
   }
   TW.NAMES = { hai: 'HAI 23.05', skab: 'SKAB', smartfarm: 'Smart-Farm-IDS', wdsevent: 'WDSEventDB', gecco: 'GECCO 2018' };
@@ -90,7 +92,8 @@
             h('span', null, h('b', null, d.runs), ' runs')),
           h('div', { class: 'pcard-best' },
             'Best ranker: ', h('b', null, d.best_sup[0]), ' AUROC ', d.best_sup[1].toFixed(2),
-            ' · best zero-label: ', h('b', null, d.best_ref[0]), ' ', d.best_ref[1].toFixed(2)),
+            ' · best zero-label: ', h('b', null, d.best_ref[0]), ' ', d.best_ref[1].toFixed(2),
+            info('AUROC: how well a detector ranks anomalous windows above normal ones (1 = perfect, 0.5 = a coin toss). Zero-label detectors learn from normal data only.')),
           h('div', { class: 'pcard-go' }, 'Open the twin →'))));
     });
   }
@@ -177,8 +180,16 @@
   }
 
   /* ------------------------------------------------------------------ side panel */
+  function info(text) { return h('i', { class: 'info', title: text }, 'i'); }
+  TW.info = info;
+  // a side-panel card: optional step number, a title, a hint on the right and one plain-language line under the title
   function card(title, hint, ...kids) {
     return h('div', { class: 'card' }, h('div', { class: 'card-h' }, h('span', null, title), hint ? h('span', { class: 'hint' }, hint) : null), ...kids);
+  }
+  function cardN(n, title, sub, hint, cls, ...kids) {
+    return h('div', { class: 'card' + (cls ? ' ' + cls : '') },
+      h('div', { class: 'card-h' }, h('span', null, n ? h('span', { class: 'card-n' }, n) : null, title), hint ? h('span', { class: 'hint' }, hint) : null),
+      sub ? h('p', { class: 'card-sub' }, sub) : null, ...kids);
   }
 
   function buildSide() {
@@ -196,30 +207,40 @@
     thrSeg.addEventListener('click', e => { const t = e.target.dataset.t; if (t) { S.thrMode = t; setRun(); } });
     const slider = h('input', { type: 'range', min: 0.5, max: 0.9995, step: 0.0005, value: S.manualQ, id: 'thrSlider',
       oninput: e => { S.manualQ = +e.target.value; S.thrMode = 'manual'; setRun(true); } });
-    side.appendChild(card('Detector', 'recorded scores of every run',
-      h('label', null, 'Model'), sel,
-      h('label', null, 'Labelled events', h('span', { class: 'lhint' }, 'label budget k')), h('div', { class: 'chips', id: 'chipsK' }),
-      h('label', null, 'Label draw'), h('div', { class: 'chips', id: 'chipsSeed' }),
-      h('label', null, 'Alarm threshold θ'), thrSeg,
-      h('div', { class: 'slider-row' }, h('span', null, 'lenient'), slider, h('span', null, 'strict')),
-      h('div', { class: 'runinfo', id: 'runInfo' })));
+    side.appendChild(cardN('1', 'Choose a detector', 'The AI model whose recorded anomaly scores drive the alarms in this replay.', 'recorded runs', null,
+      h('label', null, 'Model', info('14 detectors in five families: tabular foundation models, graph neural networks, few-label deep detectors, gradient boosting, and zero-label references that learn from normal data only.')), sel,
+      h('label', null, 'Labelled events', h('span', { class: 'lhint' }, 'label budget k'), info('How many real incidents (labelled events) the detector learned from. Fewer labels make the task harder.')), h('div', { class: 'chips', id: 'chipsK' }),
+      h('label', null, 'Alarm threshold θ', info('How high the score must go to raise an alarm. Validation F1 (the default) is tuned on a few labelled examples; 1% budget allows about one false alarm in a hundred normal windows; Manual lets you set it.')), thrSeg,
+      h('div', { class: 'runinfo', id: 'runInfo' }),
+      h('details', { class: 'more', id: 'moreSettings' }, h('summary', null, 'More settings'),
+        h('label', null, 'Label draw', info('Which random set of k labelled events was used. Every budget was repeated with five random draws.')), h('div', { class: 'chips', id: 'chipsSeed' }),
+        h('label', null, 'Manual threshold', info('Drag to set θ yourself: lenient raises more alarms, strict fewer.')),
+        h('div', { class: 'slider-row' }, h('span', null, 'lenient'), slider, h('span', null, 'strict')))));
     // live results
-    side.appendChild(card('Live results', 'up to the replay cursor',
+    side.appendChild(cardN('2', 'Live results', 'Did the detector catch the real incidents? Computed up to the replay cursor. Hover a number for its meaning.',
+      h('a', { href: '#', onclick: e => { e.preventDefault(); $('#guide').classList.remove('hidden'); } }, 'What do these mean?'), null,
       h('div', { class: 'kpis' },
-        kpi('kDet', 'events detected'), kpi('kRec', 'event recall'), kpi('kFA', 'false alarms'),
-        kpi('kWP', 'window precision'), kpi('kF1', 'event F1'), kpi('kDelay', 'mean delay')),
+        kpi('kDet', 'events detected', 'Real incidents caught by at least one alarm / incidents started so far.'),
+        kpi('kRec', 'event recall', 'The share of the incidents so far that were caught (1 = all of them).'),
+        kpi('kFA', 'false alarms', 'Alarm episodes that touch no incident, and their rate per hour of normal operation.'),
+        kpi('kWP', 'window precision', 'The share of alarmed windows that really are anomalous.'),
+        kpi('kF1', 'event F1', 'One number that balances event recall and window precision (1 = perfect).'),
+        kpi('kDelay', 'mean delay', 'Average time from the start of an incident to its first alarm.')),
       h('div', { class: 'evdots', id: 'evDots' }),
+      h('div', { class: 'dotkey' }, h('span', null, h('i', { style: { background: '#d5dde8' } }), 'not started'), h('span', null, h('i', { style: { background: '#f59e0b' } }), 'in progress'),
+        h('span', null, h('i', { style: { background: '#22a052' } }), 'caught'), h('span', null, h('i', { style: { background: '#d92d20' } }), 'missed')),
       h('div', { class: 'artline', id: 'artLine' })));
     // event log
-    side.appendChild(h('div', { class: 'card replay-only' }, h('div', { class: 'card-h' }, h('span', null, 'Event log'), h('span', { class: 'hint' }, 'newest first')),
+    side.appendChild(cardN(null, 'Event log', 'What happened so far. Click a line to jump to that moment.', 'newest first', 'replay-only',
       h('div', { class: 'log', id: 'log' })));
     // all detectors
     side.appendChild(h('div', { class: 'card replay-only', id: 'allCard' }, h('div', { class: 'card-h' }, h('span', null, 'All detectors at this moment'), h('span', { class: 'hint' }, 'same k and draw')),
+      h('p', { class: 'card-sub' }, 'Compare every model at the cursor; click a row to select it.'),
       h('div', { id: 'allBody' }, h('button', { class: 'btn', onclick: loadAll }, 'Load all ' + ds.models.length + ' detectors'))));
     buildLabSide(side);
     refreshChips();
   }
-  function kpi(id, label) { return h('div', { class: 'kpi' }, h('b', { id }, '–'), h('span', null, label)); }
+  function kpi(id, label, tip) { return h('div', { class: 'kpi', title: tip || '' }, h('b', { id }, '–'), h('span', null, label)); }
 
   function refreshChips() {
     const ds = S.ds, m = ds.modelById[S.model];
@@ -310,10 +331,11 @@
     const dur = h('input', { type: 'number', min: 1, max: 600, value: 12, id: 'injDur', class: 'num' });
     side.appendChild(h('div', { class: 'card lab-only' },
       h('div', { class: 'card-h' }, h('span', null, 'Inject a fault'), h('span', { class: 'hint' }, 'starts at the replay cursor')),
+      h('p', { class: 'card-sub' }, 'Pick a ready-made scenario, or build your own fault, then watch whether the detectors notice.'),
       h('div', { class: 'lab-sub' }, 'Scenarios'), presets,
-      h('div', { class: 'lab-sub' }, 'Custom fault'),
-      h('label', null, 'Point'), chSel,
-      h('label', null, 'Fault'), typeSel,
+      h('details', { class: 'more', id: 'customFault' }, h('summary', null, 'Custom fault'),
+      h('label', null, 'Point', info('The sensor or actuator to change.')), chSel,
+      h('label', null, 'Fault', info('Offset: a spoofed value · drift: a slow change · frozen: the value stops moving · replay: earlier readings are played back · noise · scale · force to a value.')), typeSel,
       h('label', null, 'Magnitude ', h('span', { class: 'lhint' }, '× normal range (or fraction for scale) '), h('b', { id: 'injMagV' }, '1.0')), mag,
       h('label', null, 'Duration ', h('span', { class: 'lhint' }, 'ticks of ' + ds.hop + ' s')), dur,
       h('div', { class: 'row' },
@@ -323,10 +345,11 @@
           const step = { ch: j, type, mag: type === 'scale' ? m / 3 : m };
           if (type === 'set') step.value = ch.dlo + TW.clamp((m + 3) / 6, 0, 1) * (ch.dhi - ch.dlo);
           doInject({ name: `${typeSel.selectedOptions[0].textContent} on ${ch.id}`, desc: 'custom fault', dur: +dur.value, steps: [step] });
-        } }, '⚡ Inject now'),
-        h('button', { class: 'btn', onclick: () => { lab.clear(); afterLab(); toast('All injected faults removed'); } }, 'Clear all'))));
+        } }, '⚡ Inject now'))),
+      h('div', { class: 'row' }, h('button', { class: 'btn', onclick: () => { lab.clear(); afterLab(); toast('All injected faults removed'); } }, 'Clear all faults'))));
     side.appendChild(h('div', { class: 'card lab-only' },
       h('div', { class: 'card-h' }, h('span', null, 'Detectors running in your browser'), h('span', { class: 'hint' }, 'fitted on normal data, 1% budget')),
+      h('p', { class: 'card-sub' }, 'These react to your faults. A lamp turns red when its score passes its threshold (the amber mark).'),
       h('div', { id: 'labDet' }),
       h('div', { class: 'lab-sub' }, 'Normal reference'),
       h('div', { class: 'seg small', id: 'segRef' }, h('button', { 'data-r': 'causal', class: 'on' }, 'Causal (default)'), h('button', { 'data-r': 'fixed' }, 'Fixed (counterfactual)')),
@@ -474,8 +497,15 @@
   function buildCharts() {
     const ds = S.ds;
     S.overview = new TW.Overview($('#overviewHost'), ds, t => seek(t));
+    $('#overviewHost').appendChild(h('div', { class: 'ovkey' },
+      h('b', null, 'Whole period:'),
+      h('span', null, h('i', { style: { background: 'rgba(217,45,32,.35)' } }), 'real incidents'),
+      h('span', null, h('i', { style: { background: '#1e4078', height: '2px' } }), 'detector score'),
+      h('span', null, h('i', { style: { background: 'repeating-linear-gradient(90deg,#d97706 0 4px,transparent 4px 7px)', height: '2px' } }), 'alarm threshold θ'),
+      h('span', null, h('i', { style: { background: '#f59e0b' } }), 'alarms'),
+      h('span', { class: 'hint' }, 'click or drag the strip to move in time')));
     const host = $('#chartsHost');
-    const liveWrap = h('div', { class: 'chartwrap' }, h('div', { class: 'chart-h' }, h('span', null, 'Anomaly score of the selected detector and the selected sensors'), h('span', { class: 'hint' }, 'click a sensor or component to add its trace')));
+    const liveWrap = h('div', { class: 'chartwrap' }, h('div', { class: 'chart-h' }, h('span', null, 'Anomaly score around the cursor', info('The selected detector’s score against its alarm threshold θ (dashed). Amber shading: alarmed windows; red: real incidents.')), h('span', { class: 'hint' }, 'click a sensor or component to add its trace')));
     host.appendChild(liveWrap);
     S.live = new TW.LiveChart(liveWrap, ds, 170);
     const labWrap = h('div', { class: 'chartwrap lab-only' }, h('div', { class: 'chart-h' }, h('span', null, 'In-browser detectors'),
@@ -531,7 +561,7 @@
   function evName(e) {
     const ds = S.ds;
     const cls = e.cls ? e.cls : '';
-    return `#${e.id}` + (cls ? ' · ' + cls : '') + (e.top ? ' · top point ' + e.top : '');
+    return `#${e.id}` + (cls ? ' · ' + cls : '') + (e.top ? ' · most affected: ' + e.top : '');
   }
   function rebuildLog() {
     S.log = []; S.logUpTo = -1;
@@ -621,19 +651,19 @@
     if (S.mode === 'lab') {
       const any = labAlarm(i);
       al.className = 'hud-alarm ' + (any ? 'on' : 'off');
-      al.textContent = any ? '● ALARM · in-browser detectors' : '● normal · in-browser detectors';
+      al.textContent = any ? '⚠ ALARM · in-browser detectors' : '✓ No alarm · in-browser detectors';
     } else if (!scored) {
-      al.className = 'hud-alarm idle'; al.textContent = '● calibration prefix (not scored)';
+      al.className = 'hud-alarm idle'; al.textContent = '○ Warm-up period (not scored)';
     } else {
       const on = !!S.R.flags[i];
       al.className = 'hud-alarm ' + (on ? 'on' : 'off');
-      al.textContent = (on ? '● ALARM · ' : '● normal · ') + m.label;
+      al.textContent = (on ? '⚠ ALARM · ' : '✓ No alarm · ') + m.label;
     }
     const eb = $('#hudEvent');
     const injNow = S.lab.injections.filter(x => i >= x.start && i <= x.start + x.dur);
     if (ev) {
       eb.className = 'hud-event on';
-      eb.textContent = `${EV_ICON[ev.cls] || '⚠'} Labelled event ${evName(ev)}`;
+      eb.textContent = `${EV_ICON[ev.cls] || '⚠'} Real incident in progress: labelled event ${evName(ev)}`;
     } else if (injNow.length) {
       eb.className = 'hud-event inj'; eb.textContent = '⚡ Injected fault: ' + injNow.map(x => x.name).join(' + ');
     } else { eb.className = 'hud-event'; eb.textContent = ''; }

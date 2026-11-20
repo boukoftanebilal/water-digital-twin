@@ -48,12 +48,12 @@ TW.Overview = class extends TW.Canvas {
     cv.width = this.c.width; cv.height = this.c.height;
     const g = cv.getContext('2d');
     g.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
-    g.fillStyle = '#0b1322'; g.fillRect(0, 0, w, h);
+    g.fillStyle = '#ffffff'; g.fillRect(0, 0, w, h);
     const X = i => (i / (N - 1)) * w;
     // records
     ds.segList.forEach((sg, k) => {
       if (ds.segList.length > 1) {
-        g.fillStyle = k % 2 ? '#0e182a' : '#0b1322';
+        g.fillStyle = k % 2 ? '#f3f6fa' : '#ffffff';
         g.fillRect(X(sg.tlStart), 0, X(sg.tlStart + sg.n) - X(sg.tlStart), h);
       }
       // calibration prefix
@@ -61,15 +61,15 @@ TW.Overview = class extends TW.Canvas {
       for (let i = sg.tlStart; i < sg.tlStart + sg.n; i++) if (!ds.scored[i]) { if (a < 0) a = i; } else if (a >= 0) break;
       if (a >= 0) {
         let b = a; while (b < sg.tlStart + sg.n && !ds.scored[b]) b++;
-        g.fillStyle = 'rgba(127,140,166,0.18)'; g.fillRect(X(a), 0, Math.max(1, X(b) - X(a)), h);
+        g.fillStyle = 'rgba(100,116,139,0.14)'; g.fillRect(X(a), 0, Math.max(1, X(b) - X(a)), h);
       }
     });
     // events
     ds.events.forEach(e => {
       if (e.labStart < 0) return;
       const x0 = X(e.labStart), x1 = X(e.labEnd + 1);
-      g.fillStyle = 'rgba(255,59,78,0.30)'; g.fillRect(x0, 0, Math.max(2, x1 - x0), h);
-      g.fillStyle = '#ff3b4e'; g.fillRect(x0, h - 6, Math.max(2, x1 - x0), 6);
+      g.fillStyle = 'rgba(217,45,32,0.16)'; g.fillRect(x0, 0, Math.max(2, x1 - x0), h);
+      g.fillStyle = '#d92d20'; g.fillRect(x0, h - 6, Math.max(2, x1 - x0), 6);
     });
     // score envelope (max per pixel)
     if (this.scores) {
@@ -84,17 +84,17 @@ TW.Overview = class extends TW.Canvas {
         if (m === -Infinity) continue;
         if (x === 0) g.moveTo(x, Y(m)); else g.lineTo(x, Y(m));
       }
-      g.strokeStyle = 'rgba(160,190,235,0.75)'; g.lineWidth = 1; g.stroke();
+      g.strokeStyle = 'rgba(30,64,120,0.75)'; g.lineWidth = 1; g.stroke();
       const ty = Y(this.R.thr);
-      g.setLineDash([4, 4]); g.strokeStyle = 'rgba(255,193,69,0.8)'; g.beginPath(); g.moveTo(0, ty); g.lineTo(w, ty); g.stroke(); g.setLineDash([]);
+      g.setLineDash([4, 4]); g.strokeStyle = 'rgba(217,119,6,0.9)'; g.beginPath(); g.moveTo(0, ty); g.lineTo(w, ty); g.stroke(); g.setLineDash([]);
       // flagged windows
-      g.fillStyle = 'rgba(255,193,69,0.85)';
+      g.fillStyle = 'rgba(245,158,11,0.95)';
       for (let i = 0; i < N; i++) if (this.R.flags[i]) g.fillRect(X(i), h - 12, Math.max(1, w / N), 5);
     }
     // lab injections
     if (this.lab) for (const inj of this.lab.injections) {
       const x0 = X(inj.start), x1 = X(Math.min(N - 1, inj.start + inj.dur));
-      g.fillStyle = 'rgba(176,107,255,0.35)'; g.fillRect(x0, 0, Math.max(2, x1 - x0), h);
+      g.fillStyle = 'rgba(124,58,237,0.22)'; g.fillRect(x0, 0, Math.max(2, x1 - x0), h);
     }
     this.bg = cv;
   }
@@ -105,16 +105,16 @@ TW.Overview = class extends TW.Canvas {
     ctx.clearRect(0, 0, w, h);
     ctx.drawImage(this.bg, 0, 0, w, h);
     const x = (T / (ds.N - 1)) * w;
-    ctx.fillStyle = 'rgba(57,182,255,0.12)'; ctx.fillRect(0, 0, x, h);
-    ctx.strokeStyle = '#e8eefc'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+    ctx.fillStyle = 'rgba(11,99,197,0.07)'; ctx.fillRect(0, 0, x, h);
+    ctx.strokeStyle = '#0f1b2d'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
     if (this.hoverX !== null && this.hoverX !== undefined) {
       const i = Math.round((this.hoverX / w) * (ds.N - 1));
-      ctx.fillStyle = 'rgba(232,238,252,0.9)'; ctx.font = '11px Inter, system-ui, sans-serif';
+      ctx.font = '11px Inter, system-ui, sans-serif';
       const label = TW.clock(ds.t0[TW.clamp(i, 0, ds.N - 1)], ds);
       const tw = ctx.measureText(label).width;
       const lx = TW.clamp(this.hoverX + 8, 2, w - tw - 6);
-      ctx.fillStyle = 'rgba(8,13,24,0.85)'; ctx.fillRect(lx - 4, 2, tw + 8, 16);
-      ctx.fillStyle = '#e8eefc'; ctx.fillText(label, lx, 14);
+      ctx.fillStyle = 'rgba(15,27,45,0.88)'; ctx.fillRect(lx - 4, 2, tw + 8, 16);
+      ctx.fillStyle = '#ffffff'; ctx.fillText(label, lx, 14);
     }
   }
 };
@@ -132,7 +132,7 @@ TW.LiveChart = class extends TW.Canvas {
     this.resize();
     const { ctx, w, h, ds } = this;
     ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = '#0b1322'; ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h);
     const span = Math.min(this.span, ds.N);
     const t1 = Math.max(span - 1, Math.min(ds.N - 1, Math.floor(T) + Math.floor(span * 0.15)));
     const t0 = Math.max(0, t1 - span + 1);
@@ -142,36 +142,36 @@ TW.LiveChart = class extends TW.Canvas {
     // events and flags
     for (const e of ds.events) {
       if (e.labEnd < t0 || e.labStart > t1) continue;
-      ctx.fillStyle = 'rgba(255,59,78,0.22)';
+      ctx.fillStyle = 'rgba(217,45,32,0.12)';
       ctx.fillRect(X(Math.max(t0, e.labStart)), 0, Math.max(2, X(Math.min(t1, e.labEnd) + 1) - X(Math.max(t0, e.labStart))), h - 14);
     }
     if (this.lab) for (const inj of this.lab.injections) {
       const a = inj.start, b = inj.start + inj.dur;
       if (b < t0 || a > t1) continue;
-      ctx.fillStyle = 'rgba(176,107,255,0.22)';
+      ctx.fillStyle = 'rgba(124,58,237,0.14)';
       ctx.fillRect(X(Math.max(t0, a)), 0, Math.max(2, X(Math.min(t1, b)) - X(Math.max(t0, a))), h - 14);
     }
     // score lane
     if (this.scores) {
       const y0 = top, y1 = top + laneH - 6;
       const Y = v => y1 - TW.clamp(this.scale.f(v), -0.02, 1.08) * (y1 - y0);
-      for (let i = t0; i <= t1; i++) if (this.R.flags[i]) { ctx.fillStyle = 'rgba(255,193,69,0.16)'; ctx.fillRect(X(i), y0, Math.max(1.5, (w - 52) / span), y1 - y0); }
+      for (let i = t0; i <= t1; i++) if (this.R.flags[i]) { ctx.fillStyle = 'rgba(245,158,11,0.16)'; ctx.fillRect(X(i), y0, Math.max(1.5, (w - 52) / span), y1 - y0); }
       const ty = Y(this.R.thr);
-      ctx.setLineDash([5, 4]); ctx.strokeStyle = '#ffc145'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(4, ty); ctx.lineTo(w - 48, ty); ctx.stroke(); ctx.setLineDash([]);
-      ctx.fillStyle = '#ffc145'; ctx.font = '10px Inter, system-ui, sans-serif'; ctx.fillText('θ', w - 44, ty + 3);
+      ctx.setLineDash([5, 4]); ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(4, ty); ctx.lineTo(w - 48, ty); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = '#b45309'; ctx.font = 'bold 10px Inter, system-ui, sans-serif'; ctx.fillText('θ alarm', w - 46, ty + 3);
       ctx.beginPath(); let started = false;
       for (let i = t0; i <= Math.min(T, t1); i++) {
         const p = ds.scorePos[i]; if (p < 0) { started = false; continue; }
         const x = X(i), y = Y(this.scores[p]);
         if (!started) { ctx.moveTo(x, y); started = true; } else ctx.lineTo(x, y);
       }
-      ctx.strokeStyle = this.colour || '#39b6ff'; ctx.lineWidth = 2; ctx.stroke();
-      ctx.fillStyle = '#8ea0bf'; ctx.fillText(this.label || 'score', 8, y0 + 10);
+      ctx.strokeStyle = this.colour || '#0284c7'; ctx.lineWidth = 2; ctx.stroke();
+      ctx.fillStyle = '#475569'; ctx.fillText(this.label || 'score', 8, y0 + 10);
     }
     // sensor lane
     if (lanes === 2) {
       const y0 = top + laneH + 2, y1 = top + 2 * laneH - 6;
-      const cols = ['#39b6ff', '#2fd38a', '#ff8a3d', '#c792ea'];
+      const cols = ['#0284c7', '#16a34a', '#ea580c', '#7c3aed'];
       this.traces.forEach((j, k) => {
         const ch = ds.meta.channels[j];
         const vals = injVals || ds;
@@ -189,8 +189,8 @@ TW.LiveChart = class extends TW.Canvas {
     }
     // cursor and time axis
     const xc = X(T);
-    ctx.strokeStyle = 'rgba(232,238,252,0.85)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(xc, 0); ctx.lineTo(xc, h - 14); ctx.stroke();
-    ctx.fillStyle = '#6f7f9c'; ctx.font = '10px Inter, system-ui, sans-serif';
+    ctx.strokeStyle = 'rgba(15,27,45,0.8)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(xc, 0); ctx.lineTo(xc, h - 14); ctx.stroke();
+    ctx.fillStyle = '#64748b'; ctx.font = '10px Inter, system-ui, sans-serif';
     ctx.fillText(TW.clock(ds.t0[t0], ds), 4, h - 3);
     const lab = TW.clock(ds.t0[t1], ds); ctx.fillText(lab, w - 48 - ctx.measureText(lab).width, h - 3);
   }
@@ -203,7 +203,7 @@ TW.LabChart = class extends TW.Canvas {
     this.resize();
     const { ctx, w, h, ds } = this;
     ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = '#0b1322'; ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h);
     if (!lab || !lab.scores) return;
     const span = Math.min(this.span, ds.N);
     const t1 = Math.max(span - 1, Math.min(ds.N - 1, Math.floor(T) + Math.floor(span * 0.15)));
@@ -213,17 +213,17 @@ TW.LabChart = class extends TW.Canvas {
     const Y = r => y1 - (Math.log10(1 + 9 * TW.clamp(r, 0, 4)) / Math.log10(37)) * (y1 - y0);
     for (const e of ds.events) {
       if (e.labEnd < t0 || e.labStart > t1) continue;
-      ctx.fillStyle = 'rgba(255,59,78,0.18)';
+      ctx.fillStyle = 'rgba(217,45,32,0.12)';
       ctx.fillRect(X(Math.max(t0, e.labStart)), 0, Math.max(2, X(Math.min(t1, e.labEnd) + 1) - X(Math.max(t0, e.labStart))), h - 14);
     }
     for (const inj of lab.injections) {
       const a = inj.start, b = inj.start + inj.dur;
       if (b < t0 || a > t1) continue;
-      ctx.fillStyle = 'rgba(176,107,255,0.25)';
+      ctx.fillStyle = 'rgba(124,58,237,0.16)';
       ctx.fillRect(X(Math.max(t0, a)), 0, Math.max(2, X(Math.min(t1, b)) - X(Math.max(t0, a))), h - 14);
     }
     const ty = Y(1);
-    ctx.setLineDash([5, 4]); ctx.strokeStyle = '#ffc145'; ctx.beginPath(); ctx.moveTo(0, ty); ctx.lineTo(w, ty); ctx.stroke(); ctx.setLineDash([]);
+    ctx.setLineDash([5, 4]); ctx.strokeStyle = '#d97706'; ctx.beginPath(); ctx.moveTo(0, ty); ctx.lineTo(w, ty); ctx.stroke(); ctx.setLineDash([]);
     lab.detectors.forEach(d => {
       const sc = lab.scores[d.id]; if (!sc) return;
       ctx.beginPath();
@@ -231,8 +231,8 @@ TW.LabChart = class extends TW.Canvas {
       ctx.strokeStyle = d.colour; ctx.lineWidth = 1.8; ctx.stroke();
     });
     const xc = X(T);
-    ctx.strokeStyle = 'rgba(232,238,252,0.85)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(xc, 0); ctx.lineTo(xc, h - 14); ctx.stroke();
-    ctx.fillStyle = '#6f7f9c'; ctx.font = '10px Inter, system-ui, sans-serif';
+    ctx.strokeStyle = 'rgba(15,27,45,0.8)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(xc, 0); ctx.lineTo(xc, h - 14); ctx.stroke();
+    ctx.fillStyle = '#64748b'; ctx.font = '10px Inter, system-ui, sans-serif';
     ctx.fillText('score / threshold (log scale) — dashed line = alarm level', 6, h - 3);
   }
 };
@@ -243,7 +243,7 @@ TW.spark = function (canvas, ds, j, T, span = 240, vals) {
   const w = canvas.clientWidth || 260, h = canvas.clientHeight || 60;
   canvas.width = w * dpr; canvas.height = h * dpr;
   const ctx = canvas.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.fillStyle = '#0b1322'; ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h);
   const src = vals || ds;
   const t1 = Math.min(ds.N - 1, Math.floor(T)), t0 = Math.max(0, t1 - span + 1);
   let lo = Infinity, hi = -Infinity;
@@ -252,5 +252,5 @@ TW.spark = function (canvas, ds, j, T, span = 240, vals) {
   const X = i => ((i - t0) / Math.max(1, span - 1)) * (w - 4) + 2, Y = v => h - 4 - ((v - lo) / (hi - lo)) * (h - 8);
   ctx.beginPath();
   for (let i = t0; i <= t1; i++) { if (i === t0) ctx.moveTo(X(i), Y(src.value(i, j))); else ctx.lineTo(X(i), Y(src.value(i, j))); }
-  ctx.strokeStyle = '#39b6ff'; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.strokeStyle = '#0284c7'; ctx.lineWidth = 1.6; ctx.stroke();
 };

@@ -15,9 +15,9 @@ TW.Lab = class {
     this.injections = [];
     this.refMode = 'causal';
     this.detectors = [
-      { id: 'point', label: 'Point deviation', sub: 'largest |z| of any point', colour: '#39b6ff' },
-      { id: 'pca', label: 'PCA residual', sub: 'squared prediction error', colour: '#2fd38a' },
-      { id: 'graph', label: 'Process-graph residual', sub: 'each point predicted from its graph neighbours', colour: '#ff8a3d' },
+      { id: 'point', label: 'Point deviation', sub: 'largest |z| of any point', colour: '#0284c7' },
+      { id: 'pca', label: 'PCA residual', sub: 'squared prediction error', colour: '#16a34a' },
+      { id: 'graph', label: 'Process-graph residual', sub: 'each point predicted from its graph neighbours', colour: '#ea580c' },
     ];
     this.injSet = new Set();
     this.fit();

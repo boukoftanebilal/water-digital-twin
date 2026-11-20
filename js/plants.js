@@ -13,10 +13,10 @@ TW.plants.hai = {
   sm: true,
   note: 'P1 follows the physical boiler graph shipped with HAI (TK01-TK03, HEX01, feedwater, heating and cooling loops); P2-P4 follow the HAI technical report.',
   zones: [
-    { id: 'P1', x: 10, y: 28, w: 600, h: 434, label: 'P1 · Boiler process', sub: 'Emerson Ovation DCS', col: '#1d6fd1' },
-    { id: 'P2', x: 620, y: 28, w: 370, h: 216, label: 'P2 · Turbine (rotor kit)', sub: 'GE Mark VIe', col: '#9b5de5' },
-    { id: 'P3', x: 620, y: 252, w: 370, h: 210, label: 'P3 · Water treatment', sub: 'Siemens S7-300', col: '#00a6a6' },
-    { id: 'P4', x: 10, y: 470, w: 980, h: 202, label: 'P4 · HIL grid simulator', sub: 'dSPACE SCALEXIO', col: '#f4a259' },
+    { id: 'P1', x: 10, y: 28, w: 600, h: 434, label: 'P1 · Boiler process', sub: 'Emerson Ovation DCS', col: '#1d5fbf' },
+    { id: 'P2', x: 620, y: 28, w: 370, h: 216, label: 'P2 · Turbine (rotor kit)', sub: 'GE Mark VIe', col: '#7c3aed' },
+    { id: 'P3', x: 620, y: 252, w: 370, h: 210, label: 'P3 · Water treatment', sub: 'Siemens S7-300', col: '#0f8f8f' },
+    { id: 'P4', x: 10, y: 470, w: 980, h: 202, label: 'P4 · HIL grid simulator', sub: 'dSPACE SCALEXIO', col: '#d97706' },
   ],
   comps: [
     // P1 heating loop
@@ -136,7 +136,7 @@ TW.plants.hai = {
 TW.plants.skab = {
   vb: [1000, 600],
   note: 'Water circulation loop of the Skoltech testbed: tank, inlet valve, centrifugal pump driven by an electric motor, outlet valve. Valve symbols close during the labelled valve-closing experiments.',
-  zones: [{ id: 'loop', x: 24, y: 28, w: 952, h: 548, label: 'Skoltech water circulation testbed', sub: '8 sensors · 1 Hz', col: '#1d6fd1' }],
+  zones: [{ id: 'loop', x: 24, y: 28, w: 952, h: 548, label: 'Skoltech water circulation testbed', sub: '8 sensors · 1 Hz', col: '#1d5fbf' }],
   comps: [
     { id: 'tank', t: 'tank', x: 78, y: 150, w: 170, h: 270, label: 'Water tank', lv: 0.72, liq: 'water' },
     { id: 'v1', t: 'valve', x: 330, y: 480, o: 'h', label: 'Valve 1 · inlet', evClose: 'valve1', s: 1.6 },
@@ -167,7 +167,7 @@ TW.plants.skab = {
 TW.plants.smartfarm = {
   vb: [1000, 600],
   note: 'Schematic of the smart farm described by Smart-Farm-IDS: nutrient tank with fill and irrigation pumps, two soil beds, greenhouse climate station and grow light.',
-  zones: [{ id: 'farm', x: 18, y: 28, w: 964, h: 552, label: 'Smart farm', sub: '14 sensors · 1 Hz', col: '#2a9d4b' }],
+  zones: [{ id: 'farm', x: 18, y: 28, w: 964, h: 552, label: 'Smart farm', sub: '14 sensors · 1 Hz', col: '#15803d' }],
   comps: [
     { id: 'sun', t: 'sun', x: 92, y: 120, r: 30, int: { ch: 'LightIntensity' } },
     { id: 'src', t: 'source', x: 34, y: 330, w: 72, h: 56, label: 'Water supply' },
@@ -212,7 +212,7 @@ TW.plants.wdsevent = {
   vb: [1000, 600],
   note: 'Schematic inferred from the dataset channels: four pump lines, each with a variable-frequency drive, a pressure transmitter and a flow meter, joined by a common circuit throttled by two analog valves (not to scale).',
   sm: true,
-  zones: [{ id: 'net', x: 18, y: 28, w: 964, h: 552, label: 'Water distribution testbed', sub: '15 sensors · 1 Hz', col: '#1d6fd1' }],
+  zones: [{ id: 'net', x: 18, y: 28, w: 964, h: 552, label: 'Water distribution testbed', sub: '15 sensors · 1 Hz', col: '#1d5fbf' }],
   comps: [
     { id: 'R1', t: 'reservoir', x: 40, y: 120, w: 96, h: 72, label: 'Supply tank 1' },
     { id: 'R2', t: 'reservoir', x: 40, y: 406, w: 96, h: 72, label: 'Supply tank 2' },
@@ -267,7 +267,7 @@ TW.plants.wdsevent = {
 TW.plants.gecco = {
   vb: [1000, 600],
   note: 'Schematic of the bulk drinking-water supply of Thüringer Fernwasserversorgung described by the GECCO 2018 challenge: two water lines with flow meters and chlorine-dioxide measuring stations, and the quality analysers of the measuring station (not to scale).',
-  zones: [{ id: 'sup', x: 18, y: 28, w: 964, h: 552, label: 'Bulk drinking-water supply', sub: '9 sensors · 1 sample per minute', col: '#1d6fd1' }],
+  zones: [{ id: 'sup', x: 18, y: 28, w: 964, h: 552, label: 'Bulk drinking-water supply', sub: '9 sensors · 1 sample per minute', col: '#1d5fbf' }],
   comps: [
     { id: 'dam', t: 'reservoir', x: 36, y: 214, w: 120, h: 104, label: 'Reservoir', dam: true },
     { id: 'wtp', t: 'building', x: 186, y: 196, w: 124, h: 118, label: 'Treatment plant', sub: 'ClO₂ dosing' },
@@ -304,6 +304,6 @@ TW.plants.gecco = {
 
 /* palette of fluids and lines */
 TW.FLUID = {
-  water: '#39b6ff', hot: '#ff8a3d', hotret: '#d98c5f', cool: '#68e0ff', nutrient: '#5fd38f',
-  shaft: '#9aa7bd', power: '#ffd166', signal: '#7f8ca6',
+  water: '#0284c7', hot: '#ea580c', hotret: '#c2410c', cool: '#0891b2', nutrient: '#16a34a',
+  shaft: '#64748b', power: '#ca8a04', signal: '#94a3b8',
 };
