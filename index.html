@@ -6,35 +6,42 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Water Digital Twin</title>
 <meta name="description" content="Digital twin of five water-infrastructure testbeds: replay of the evaluation periods with the recorded anomaly scores of 14 detectors, and a what-if lab with fault injection.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%230b1322'/%3E%3Cpath d='M32 10 C24 24 18 32 18 40 a14 14 0 0 0 28 0 C46 32 40 24 32 10Z' fill='%2339b6ff'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="css/app.css?v=4">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%230b63c5'/%3E%3Cpath d='M32 10 C24 24 18 32 18 40 a14 14 0 0 0 28 0 C46 32 40 24 32 10Z' fill='%23ffffff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/app.css?v=5">
 </head>
 <body class="at-home">
 <header class="top">
   <a class="brand" href="#/">
-    <svg viewBox="0 0 64 64" width="26" height="26"><circle cx="32" cy="32" r="30" fill="#0b1322" stroke="#36d6e7" stroke-width="2"/><path d="M32 12 C24 25 18 33 18 41 a14 14 0 0 0 28 0 C46 33 40 25 32 12Z" fill="#39b6ff"/><path d="M24 42 a8 8 0 0 0 8 8" stroke="#e8eefc" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+    <svg viewBox="0 0 64 64" width="28" height="28"><circle cx="32" cy="32" r="31" fill="#0b63c5"/><path d="M32 12 C24 25 18 33 18 41 a14 14 0 0 0 28 0 C46 33 40 25 32 12Z" fill="#ffffff"/><path d="M24 42 a8 8 0 0 0 8 8" stroke="#0b63c5" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
     <span>Water Digital Twin</span><small>5 testbeds · 14 detectors</small>
   </a>
   <nav class="tabs" id="tabs"></nav>
   <div class="grow"></div>
   <div class="seg twin-only" id="viewSeg"><button data-v="2d" class="on">2D</button><button data-v="3d">3D</button></div>
   <div class="seg twin-only" id="modeSeg"><button data-m="replay" class="on">Replay</button><button data-m="lab">What-if lab</button></div>
+  <button class="ghost guide" id="guideBtn" title="How to use the twin, and what the words mean">? Guide</button>
   <button class="ghost" id="aboutBtn">About</button>
 </header>
 
 <main id="home" class="page">
   <section class="hero">
     <div class="hero-txt">
-      <div class="eyebrow">Graph neural networks versus tabular foundation models · label-scarce anomaly detection</div>
+      <div class="eyebrow">AI anomaly detection for water infrastructure</div>
       <h1>A digital twin of five water-infrastructure testbeds</h1>
-      <p>Replay the real evaluation periods of <b>HAI 23.05</b>, <b>SKAB</b>, <b>Smart-Farm-IDS</b>, <b>WDSEventDB</b> and <b>GECCO 2018</b> through animated models of each plant. Choose any of the 14 detectors, its label budget and draw, and watch it raise or miss alarms as the attacks, faults and quality events unfold. Then switch to the what-if lab, inject your own faults and see detectors running in your browser respond.</p>
+      <p>Watch the real sensor data of <b>HAI 23.05</b>, <b>SKAB</b>, <b>Smart-Farm-IDS</b>, <b>WDSEventDB</b> and <b>GECCO 2018</b> replay through an animated model of each plant, and see when 14 AI detectors raise alarms, and whether they catch the real attacks, faults and water-quality events. Then inject your own faults in the what-if lab.</p>
+      <div class="steps">
+        <div class="step"><span class="step-n">1</span><div><b>Pick a plant</b><span>Open one of the five testbeds below, or use the tabs at the top.</span></div></div>
+        <div class="step"><span class="step-n">2</span><div><b>Choose a detector and press play</b><span>Pick one of the 14 detectors and replay the period it was tested on.</span></div></div>
+        <div class="step"><span class="step-n">3</span><div><b>Compare alarms with real incidents</b><span>Real incidents are marked in red; the plant’s frame blinks while the detector raises an alarm.</span></div></div>
+      </div>
       <div class="hero-feats">
-        <div><b>Real data, recorded scores</b><span>Sensor values from the datasets; anomaly scores of all 14 detectors, every label budget and draw (1,055 runs); event metrics recomputed live as the replay advances.</span></div>
-        <div><b>2D and 3D</b><span>A SCADA-style schematic and a 3D model of every plant, animated from the sensor values: tanks fill, pumps spin, valves move, points light up when they deviate.</span></div>
-        <div><b>What-if lab</b><span>Leaks, frozen or spoofed sensors, forced actuators: point-deviation, PCA-residual and process-graph-residual detectors fitted on normal data react in real time.</span></div>
+        <div><b>Real data, recorded scores</b><span>Sensor values from the datasets, and the stored scores of all 14 detectors at every label budget and draw (1,055 runs). Results are recomputed live as the replay advances.</span></div>
+        <div><b>2D and 3D</b><span>A control-room schematic and a 3D model of every plant, animated from the sensor values: tanks fill, pumps spin, valves move, and sensors change colour when they leave their normal range.</span></div>
+        <div><b>What-if lab</b><span>Create leaks, frozen or spoofed sensors and forced actuators, and watch three detectors running in your browser react in real time.</span></div>
       </div>
     </div>
   </section>
+  <div class="cards-h"><h2>Choose a plant</h2><span class="hint">five open testbeds · click a card to open its twin</span></div>
   <section class="cards" id="cards"></section>
   <footer class="foot">
     <p>Based on the study <i>Graph Neural Networks versus Tabular Foundation Models for Label-Scarce Anomaly Detection in Water Infrastructure: A Comparison on Five Datasets</i> (B. Boukoftane, J. M. Navarro Ruiz, A. Pita Lozano). The results are preliminary and may change.</p>
@@ -56,7 +63,7 @@
         <div class="loading hidden" id="loading">Loading…</div>
       </div>
       <div class="stagefoot">
-        <div class="legend2"><span><i style="background:#2fd38a"></i>deviation |z| &lt; 2</span><span><i style="background:#ffc145"></i>2–4</span><span><i style="background:#ff4d5e"></i>&gt; 4</span><span><i class="evk"></i>labelled event (top point)</span><span><i style="background:#b06bff"></i>injected fault</span></div>
+        <div class="legend2"><b class="lg-h">Sensor colours:</b><span><i style="background:#22a052"></i>normal (|z| &lt; 2)</span><span><i style="background:#f59e0b"></i>unusual (2–4)</span><span><i style="background:#d92d20"></i>very unusual (&gt; 4)</span><span><i class="evk"></i>most affected by a real incident</span><span><i style="background:#7c3aed"></i>changed by your fault</span><span><i class="evk" style="border-style:solid;border-radius:2px!important"></i>blinking red frame = alarm</span></div>
         <div class="note" id="plantNote"></div>
       </div>
       <div class="transport" id="transport"></div>
@@ -68,6 +75,38 @@
   <div class="inspector hidden" id="inspector"></div>
 </main>
 
+<div class="modal hidden" id="guide">
+  <div class="modal-box">
+    <button class="close">×</button>
+    <h2>How to use the twin</h2>
+    <div class="gsteps">
+      <div class="gstep"><span class="step-n">1</span><div><b>Pick a plant.</b> The tabs at the top open the five testbeds. Each one replays a real period of recorded sensor data, the evaluation period on which the detectors were tested.</div></div>
+      <div class="gstep"><span class="step-n">2</span><div><b>Choose a detector.</b> In the side panel, pick one of the 14 AI detectors and how many labelled incidents it learned from. Its recorded anomaly scores then drive the alarms.</div></div>
+      <div class="gstep"><span class="step-n">3</span><div><b>Press play</b> (▶ under the plant, or the space bar). Tanks fill, pumps spin and every sensor shows its value and a coloured dot.</div></div>
+      <div class="gstep"><span class="step-n">4</span><div><b>Watch the alarms.</b> A red badge above the plant means a real incident is in progress; the red frame around the plant blinks while the detector raises an alarm. Ideally the two happen together.</div></div>
+      <div class="gstep"><span class="step-n">5</span><div><b>Read the live results</b> on the right: how many incidents were caught, how many false alarms, and how quickly.</div></div>
+      <div class="gstep"><span class="step-n">6</span><div><b>Try the what-if lab</b> (top right) to inject your own faults and watch three detectors running in your browser react.</div></div>
+    </div>
+    <h3>Colours</h3>
+    <div class="gkey"><span><i style="background:#22a052"></i>normal sensor</span><span><i style="background:#f59e0b"></i>unusual</span><span><i style="background:#d92d20"></i>very unusual, or a real incident</span><span><i style="background:#7c3aed"></i>your injected fault</span><span><i style="background:#f59e0b;border-radius:2px"></i>windows flagged by the detector</span></div>
+    <h3>Words used on this site</h3>
+    <dl class="gloss">
+      <dt>Detector</dt><dd>An AI model that gives every minute of data an anomaly score: the higher, the more unusual.</dd>
+      <dt>Labelled event</dt><dd>A real incident (an attack, a fault or a quality event) whose start and end are known. Detectors learn from a few of them and are judged on others.</dd>
+      <dt>Label budget k</dt><dd>How many labelled events the detector learned from (1 to 14). Zero-label references learn from normal data only.</dd>
+      <dt>Label draw</dt><dd>Which random set of k events was used. Every budget was repeated five times.</dd>
+      <dt>Alarm threshold θ</dt><dd>The score above which a window raises an alarm. “Validation F1” is tuned on a few labelled examples; “1% budget” allows about one false alarm in a hundred normal windows.</dd>
+      <dt>Window</dt><dd>One minute of data; a new window starts every 30 seconds (on GECCO 2018, twelve minutes of data every six minutes).</dd>
+      <dt>Deviation z</dt><dd>How far a sensor is from its normal level, in units of its normal variation. The normal level follows the plant (the median of the previous two hours, or the first minutes of a short record), so slow changes do not count.</dd>
+      <dt>Event recall</dt><dd>The share of the incidents so far that raised at least one alarm.</dd>
+      <dt>False alarm</dt><dd>An alarm episode that touches no incident; also given per hour of normal operation.</dd>
+      <dt>Window precision</dt><dd>The share of alarmed windows that really are anomalous.</dd>
+      <dt>Event F1</dt><dd>One number that balances event recall and window precision (1 is perfect).</dd>
+      <dt>Mean delay</dt><dd>The average time from the start of an incident to its first alarm.</dd>
+      <dt>AUROC</dt><dd>How well a detector ranks anomalous windows above normal ones: 1 is perfect, 0.5 is a coin toss.</dd>
+    </dl>
+  </div>
+</div>
 <div class="modal hidden" id="about">
   <div class="modal-box">
     <button class="close">×</button>
@@ -84,14 +123,14 @@
 
 <script src="vendor/three.min.js"></script>
 <script src="vendor/OrbitControls.js"></script>
-<script src="js/core.js?v=4"></script>
-<script src="js/metrics.js?v=4"></script>
-<script src="js/plants.js?v=4"></script>
-<script src="js/art.js?v=4"></script>
-<script src="js/view2d.js?v=4"></script>
-<script src="js/view3d.js?v=4"></script>
-<script src="js/charts.js?v=4"></script>
-<script src="js/lab.js?v=4"></script>
-<script src="js/app.js?v=4"></script>
+<script src="js/core.js?v=5"></script>
+<script src="js/metrics.js?v=5"></script>
+<script src="js/plants.js?v=5"></script>
+<script src="js/art.js?v=5"></script>
+<script src="js/view2d.js?v=5"></script>
+<script src="js/view3d.js?v=5"></script>
+<script src="js/charts.js?v=5"></script>
+<script src="js/lab.js?v=5"></script>
+<script src="js/app.js?v=5"></script>
 </body>
 </html>

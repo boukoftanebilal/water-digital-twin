@@ -10,6 +10,8 @@ This site is an interactive digital twin of five water-infrastructure testbeds:
 - WDSEventDB
 - GECCO 2018
 
+New to the site? The **? Guide** button in the top bar explains, step by step, how to read the plant, the alarms and the results, and what the words mean (label budget, alarm threshold, event recall, false alarms...).
+
 It is based on the study *Graph Neural Networks versus Tabular Foundation Models for Label-Scarce Anomaly Detection in Water Infrastructure: A Comparison on Five Datasets*, by B. Boukoftane, J. M. Navarro Ruiz and A. Pita Lozano. The results are preliminary and may change.
 
 ## Replay
